@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -18,14 +17,15 @@ class Ticket extends Model
         'ticket_numero',
         'status',
         'mesa',
+        'user_id',
     ];
 
     // Prefijos por área
     const PREFIJOS = [
-        'Académico'      => 'ACA',
-        'Práctica'       => 'PRA',
-        'Inclusión'      => 'INC',
-        'Financiero'     => 'FIN',
+        'Académico'  => 'ACA',
+        'Práctica'   => 'PRA',
+        'Inclusión'  => 'INC',
+        'Financiero' => 'FIN',
     ];
 
     // Estados válidos
@@ -52,11 +52,16 @@ class Ticket extends Model
     public function scopeEnEspera($query)
     {
         return $query->where('status', self::STATUS_ESPERA)
-                     ->orderBy('created_at', 'asc');
+            ->orderBy('created_at', 'asc');
     }
 
     public function scopeLlamando($query)
     {
         return $query->where('status', self::STATUS_LLAMANDO);
+    }
+
+    public function coordinador()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
