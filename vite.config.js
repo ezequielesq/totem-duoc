@@ -5,10 +5,15 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
+                'resources/css/app.css',
                 'resources/css/styles.css',
+                'resources/js/app.js',
                 'resources/js/script.js',
             ],
             refresh: true,
         }),
     ],
+    build: {
+        manifest: 'manifest.json',
+    },
 });

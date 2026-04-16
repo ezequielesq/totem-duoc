@@ -1,0 +1,15 @@
+services:
+  totem_duoc:
+    build: .
+    container_name: totem_duoc
+    ports:
+      - "8082:80"
+    volumes:
+      - .env:/var/www/html/.env
+    restart: always
+    networks:
+      - shared_network
+
+networks:
+  shared_network:
+    external: true
