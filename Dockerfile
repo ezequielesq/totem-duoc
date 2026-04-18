@@ -18,4 +18,4 @@ COPY docker/apache.conf /etc/apache2/sites-enabled/000-default.conf
 
 EXPOSE 80
 
-CMD php artisan migrate --force --seed && apache2-foreground
+CMD php artisan migrate --force && apache2-foreground

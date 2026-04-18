@@ -7,6 +7,8 @@ Route::get('/', function () {
     return redirect('/asesor');
 });
 
+Route::get('/pantalla', [TicketController::class, 'pantalla']);
+
 Auth::routes(['register' => false]);
 
 Route::middleware('auth')->group(function () {

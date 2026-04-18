@@ -21,6 +21,7 @@ class TicketController extends Controller
             'rut'    => 'required|string',
             'nombre' => 'required|string',
             'motivo' => 'required|in:Académico,Práctica,Inclusión,Financiero',
+            'correo' => 'nullable|email',
         ]);
 
         $ticketNumero = Ticket::generarNumero($request->motivo);
@@ -32,6 +33,10 @@ class TicketController extends Controller
             'ticket_numero' => $ticketNumero,
             'status'        => Ticket::STATUS_ESPERA,
         ]);
+
+        if ($request->correo) {
+            Mail::to($request->correo)->send(new TicketMail($ticket));
+        }
 
         return response()->json([
             'success'      => true,
@@ -58,22 +63,22 @@ class TicketController extends Controller
      * Reemplaza gestionar_ticket.php accion=llamar
      * POST /api/tickets/{id}/call
      */
-public function call(Request $request, int $id): JsonResponse
-{
-    $request->validate([
-        'mesa' => 'required|integer|between:1,4',
-    ]);
+    public function call(Request $request, int $id): JsonResponse
+    {
+        $request->validate([
+            'mesa' => 'required|integer|between:1,4',
+        ]);
 
-    $ticket = Ticket::findOrFail($id);
+        $ticket = Ticket::findOrFail($id);
 
-    $ticket->update([
-        'status'  => Ticket::STATUS_LLAMANDO,
-        'mesa'    => $request->mesa,
-        'user_id' => auth()->id(),
-    ]);
+        $ticket->update([
+            'status'  => Ticket::STATUS_LLAMANDO,
+            'mesa'    => $request->mesa,
+            'user_id' => auth()->id(),
+        ]);
 
-    return response()->json(['success' => true]);
-}
+        return response()->json(['success' => true]);
+    }
 
     /**
      * Finaliza la atención de un ticket.
@@ -125,7 +130,7 @@ public function call(Request $request, int $id): JsonResponse
 /**
  * Envía un documento PDF por correo al estudiante.
  * Reemplaza enviar_documento.php
- * POST /api/tickets/email/documento
+ * POST /api/tickets/documento/email
  */
     public function sendDocumentoEmail(Request $request): JsonResponse
     {
@@ -143,5 +148,10 @@ public function call(Request $request, int $id): JsonResponse
         ));
 
         return response()->json(['success' => true]);
+    }
+
+    public function pantalla()
+    {
+        return view('pantalla.index');
     }
 }

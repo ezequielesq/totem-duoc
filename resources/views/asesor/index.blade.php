@@ -25,6 +25,12 @@
             <button onclick="location.reload()" class="btn-change-mesa">
                 Cambiar Mesa
             </button>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn-change-mesa">
+                    Cerrar Sesión
+                </button>
+            </form>
         </header>
 
         <div class="container">

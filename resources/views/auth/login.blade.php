@@ -1,73 +1,193 @@
 @extends('layouts.app')
 
+@section('title', 'Iniciar Sesión — Tótem Duoc UC')
+
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+<style>
+    body {
+        background-color: var(--duoc-blue);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+    .login-wrapper {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+    .login-header {
+        background-color: var(--duoc-blue);
+        border-bottom: 6px solid var(--duoc-yellow);
+        padding: 30px 20px;
+        text-align: center;
+    }
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+    .login-header h1 {
+        color: white;
+        margin: 0;
+        font-size: 28px;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
 
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+    .login-header p {
+        color: var(--duoc-yellow);
+        margin: 6px 0 0;
+        font-size: 14px;
+    }
 
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+    .login-body {
+        padding: 35px 40px;
+    }
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+    .login-body label {
+        font-weight: 600;
+        color: var(--duoc-blue);
+        font-size: 14px;
+        margin-bottom: 6px;
+        display: block;
+    }
 
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+    .login-body input[type="email"],
+    .login-body input[type="password"] {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 15px;
+        box-sizing: border-box;
+        transition: border-color 0.2s;
+        outline: none;
+    }
 
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+    .login-body input:focus {
+        border-color: var(--duoc-blue);
+    }
 
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+    .login-body input.is-invalid {
+        border-color: #dc3545;
+    }
 
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 4px;
+        display: block;
+    }
 
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 25px;
+    }
+
+    .form-check input {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--duoc-blue);
+    }
+
+    .form-check label {
+        font-size: 14px;
+        color: #555;
+        margin: 0;
+        font-weight: normal;
+    }
+
+    .btn-login {
+        width: 100%;
+        background-color: var(--duoc-blue);
+        color: white;
+        border: none;
+        padding: 14px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-login:hover {
+        background-color: #002a57;
+    }
+
+    .login-footer {
+        text-align: center;
+        padding: 15px;
+        border-top: 1px solid #f0f0f0;
+        font-size: 12px;
+        color: #aaa;
+    }
+</style>
+
+<div class="login-wrapper">
+    <div class="login-header">
+        <h1>Duoc UC</h1>
+        <p>Sede San Bernardo — Panel de Coordinadores</p>
+    </div>
+
+    <div class="login-body">
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+
+            <div class="form-group">
+                <label for="email">Correo institucional</label>
+                <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    value="{{ old('email') }}"
+                    class="@error('email') is-invalid @enderror"
+                    required
+                    autocomplete="email"
+                    autofocus
+                    placeholder="coordinador@duoc.cl"
+                >
+                @error('email')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
             </div>
-        </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    class="@error('password') is-invalid @enderror"
+                    required
+                    autocomplete="current-password"
+                    placeholder="••••••••"
+                >
+                @error('password')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                <label for="remember">Recordarme</label>
+            </div>
+
+            <button type="submit" class="btn-login">Iniciar sesión</button>
+        </form>
+    </div>
+
+    <div class="login-footer">
+        Tótem de Autoservicio — Duoc UC San Bernardo
     </div>
 </div>
 @endsection

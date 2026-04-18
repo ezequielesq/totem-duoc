@@ -3,11 +3,16 @@
 use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
+// Ruta para React del tótem
+Route::post('/tickets', [TicketController::class, 'store']);
+Route::post('/tickets/documento/email', [TicketController::class, 'sendDocumentoEmail']);
+
+// Rutas para enviar correos electrónicos
+Route::post('/tickets/{id}/email', [TicketController::class, 'sendTicketEmail']);
+
 // Rutas API para gestión de tickets
 Route::middleware(['web', 'auth'])->group(function () {
-    Route::get('/tickets/queue',            [TicketController::class, 'queue']);
-    Route::post('/tickets/{id}/call',       [TicketController::class, 'call']);
-    Route::post('/tickets/{id}/finish',     [TicketController::class, 'finish']);
-    Route::post('/tickets/{id}/email',      [TicketController::class, 'sendTicketEmail']);
-    Route::post('/tickets/email/documento', [TicketController::class, 'sendDocumentoEmail']);
+    Route::get('/tickets/queue', [TicketController::class, 'queue']);
+    Route::post('/tickets/{id}/call', [TicketController::class, 'call']);
+    Route::post('/tickets/{id}/finish', [TicketController::class, 'finish']);
 });
