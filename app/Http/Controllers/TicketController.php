@@ -170,9 +170,9 @@ class TicketController extends Controller
     // panel() y pantalla()
     // =========================================================================
 
-    public function panel()
+    public function asesor()
     {
-        return view('asesor.index');
+        return view('asesor.asesor');
     }
 
     public function pantalla()
