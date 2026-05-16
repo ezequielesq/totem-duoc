@@ -177,7 +177,7 @@ class TicketController extends Controller
 
     public function pantalla()
     {
-        return view('pantalla.index');
+        return view('pantalla.pantalla');
     }
 
     // =========================================================================

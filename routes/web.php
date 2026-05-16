@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,4 +14,5 @@ Auth::routes(['register' => false]);
 
 Route::middleware('auth')->group(function () {
     Route::get('/asesor', [TicketController::class, 'panel']);
+    Route::get('/dashboard', [DashboardController::class, 'dashboard']);
 });

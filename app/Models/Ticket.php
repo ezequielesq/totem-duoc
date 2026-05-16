@@ -3,16 +3,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ticket extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // =========================================================================
     // Constantes de status
     // =========================================================================
 
-    const STATUS_ESPERA   = 'en_espera';
+    const STATUS_ESPERA   = 'espera';
     const STATUS_LLAMANDO = 'llamando';
     const STATUS_ATENDIDO = 'atendido';
 
@@ -83,5 +84,10 @@ class Ticket extends Model
 
         // Formato: prefijo + número con 3 dígitos (AC001, AC002, ... AC999)
         return $prefijo . str_pad($siguiente, 3, '0', STR_PAD_LEFT);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
